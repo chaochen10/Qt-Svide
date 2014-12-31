@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/userInterface">
+        <file>gui_test.qml</file>
+    </qresource>
+    <qresource prefix="/iconos">
+        <file>imagenes/connect.png</file>
+        <file>imagenes/disconnect.png</file>
+        <file>imagenes/module_RN.png</file>
+        <file>imagenes/logo_sammic.png</file>
+    </qresource>
+</RCC>
