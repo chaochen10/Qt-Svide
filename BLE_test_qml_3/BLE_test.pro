@@ -14,10 +14,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    svide.cpp
+    svideBle.cpp
 
 HEADERS  += mainwindow.h \
-    svide.h
+    svideBle.h
 
 FORMS    += mainwindow.ui
 

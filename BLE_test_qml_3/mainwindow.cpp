@@ -1,10 +1,9 @@
 #include "mainwindow.h"
-#include "svide.h"
+#include "svideBle.h"
 #include "ui_mainwindow.h"
 #include <QtSerialPort/QSerialPortInfo>
 #include <QtSerialPort/QtSerialPort>
 #include <QQuickItem>
-//#include <QTimer>
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -12,9 +11,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    Svide = new svide();
+    Svide = new svideBle();
     timer_BLEconfig = new QTimer(this);
     timer_BLEnotificacion = new QTimer(this);
+    timer_termocirculador = new QTimer(this);
+    value_dialMin_set = ui->dial_min->value();
+    value_dialTemp_set = ui->dial_temp->value();
+    estadoSvide = "reposo";
+    min_actual = 0;
+    segRestante_actual = 0;
+    temp_actual = 20;
+    contarTiempoMostrar=0; //para enviar tiempo actual al GUI
 
     ui->button_blenotify->setDefault(false);
     Ble_servicio = Svide->UUID_servicio;
@@ -61,20 +68,24 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::initActionsConnections(){
+    //comunicacion serie
     connect(ui->serialComButton, SIGNAL(clicked()), this, SLOT(openSerialPort()));
     connect(serial, SIGNAL(readyRead()),this, SLOT(onSerialRead()));
     connect(ui->comando, SIGNAL(returnPressed()), SLOT(onSerialWrite()));
-
+    //widget
     connect(ui->dial_min, SIGNAL(valueChanged(int)), this, SLOT(valueChangedDialMin()));
     connect(ui->dial_temp, SIGNAL(valueChanged(int)), this, SLOT(valueChangedDialTemp()));
-
+    connect(ui->button_svideStart,SIGNAL(clicked()),this,SLOT(onStartTermocirculador()));
+    //BLE
     connect(ui->button_bleconfig,SIGNAL(clicked()),this, SLOT(initBLEconfig()));
     connect(timer_BLEconfig, SIGNAL(timeout()), this, SLOT(update_initBLEconfig()));
     timer_BLEconfig->stop();
-
     connect(ui->button_blenotify,SIGNAL(clicked()),this, SLOT(BLEnotify()));
     connect(timer_BLEnotificacion,SIGNAL(timeout()),this,SLOT(update_BLEnotify()));
     timer_BLEnotificacion->stop();
+    //termocirculador
+    connect(timer_termocirculador, SIGNAL(timeout()),this, SLOT(update_termocirculador()));
+    timer_termocirculador->stop();
 }
 
 void MainWindow::openSerialPort()
@@ -95,6 +106,7 @@ void MainWindow::openSerialPort()
 
         if(serial->isOpen()){
             ui->serialComButton->setIcon(QIcon(":/iconos/imagenes/connect.png"));
+            timer_termocirculador->start(2000);
         }
         ui->button_bleconfig->setEnabled(true);
     }
@@ -127,20 +139,14 @@ void MainWindow::onSerialWrite(){
 }
 
 void MainWindow::valueChangedDialMin(){
-    int value_dialMin = ui->dial_min->value();
-    value_dialMin = int(value_dialMin/1.2);
-
-//    value_dialMin = 100 -value_dialMin;
-    if(value_dialMin==0)value_dialMin =0;
-    else if(value_dialMin==100)value_dialMin=100;
-
-    m_currentRootObject->setProperty("angTiempo_p", value_dialMin);
+    value_dialMin_set = ui->dial_min->value();
+    m_currentRootObject->setProperty("angTiempo_p", value_dialMin_set);
 }
 
 void MainWindow::valueChangedDialTemp(){
-    int value_dialTemp = ui->dial_temp->value();
-
-    m_currentRootObject->setProperty("angTemp_p", value_dialTemp);
+    value_dialTemp_set = ui->dial_temp->value();
+    m_currentRootObject->setProperty("angTemp_p", value_dialTemp_set);
+    m_currentRootObject->setProperty("tiempo_mostrar",value_dialTemp_set);
 }
 
 void MainWindow::initBLEconfig(){
@@ -224,7 +230,7 @@ void MainWindow::BLEnotify(){
         ui->button_blenotify->setStyleSheet("background-color:rgb(255, 178, 102);");
         ui->button_blenotify->setDefault(true);
 //        qDebug()<<ui->button_blenotify->isDefault();
-        timer_BLEnotificacion->start(1000);
+        timer_BLEnotificacion->start(2000);
     }
     else if(ui->button_blenotify->isDefault()){
         ui->button_blenotify->setStyleSheet("");
@@ -232,6 +238,7 @@ void MainWindow::BLEnotify(){
 //        qDebug()<<ui->button_blenotify->isDefault();
         timer_BLEnotificacion->stop();
     }
+//    qDebug()<<ui->button_blenotify->isDefault();
 }
 void MainWindow::update_BLEnotify(){
     QString soloUUIDnotify = Ble_notificacion.left(32);
@@ -243,3 +250,104 @@ void MainWindow::update_BLEnotify(){
     qDebug()<<notificacion;
     serial->write(notificacion.toLatin1());
 }
+
+void MainWindow::onStartTermocirculador(){
+    //si se enciende cambiar icono/color
+    /**/
+
+    if(estadoSvide=="reposo"){
+//        value_dialTemp_set = ui->dial_temp->value();
+        estadoSvide="calentando";
+        timer_termocirculador->start(1000);
+        imagenMostrarAgua =true;
+         m_currentRootObject->setProperty("onCiclo",false);
+    }
+    else if(estadoSvide=="calentamientoTerminado"){
+        estadoSvide="ciclo";
+        ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua3_ciclo.png"));
+        timer_termocirculador->start(1000);
+         m_currentRootObject->setProperty("onCiclo",true);
+    }
+    else if(estadoSvide=="ciclo"){
+        estadoSvide="pausa";
+        ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua3_pausa.png"));
+    }
+    else if(estadoSvide=="pausa"){
+        estadoSvide="ciclo";
+        ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua3_ciclo.png"));
+        timer_termocirculador->start(1000);
+    }
+    else if(estadoSvide=="completado"){
+        estadoSvide="reposo";
+         m_currentRootObject->setProperty("onCiclo",false);
+        ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua00_reposo.png"));
+        temp_actual = 20;
+        min_actual = 0;
+    }
+
+}
+
+void MainWindow::termocirculador(){
+
+}
+
+void MainWindow::update_termocirculador(){
+//    if(serial->isOpen()){
+       /*info estado*/
+      if(estadoSvide=="reposo"){
+
+      }
+      else if(estadoSvide =="calentando"){
+          temp_actual = temp_actual + 1; //actualización temperatura
+          segRestante_actual = (timer_termocirculador->interval())/1000*(value_dialTemp_set-temp_actual);//actualización tiempo restante de calentamiento
+          //cambiar imagen agua0 calentando
+          if(imagenMostrarAgua){
+              ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua0.png"));
+              imagenMostrarAgua=false;
+          }
+          //cambiar imagen agua1 calentando
+          else if(!imagenMostrarAgua){
+              ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua1.png"));
+              imagenMostrarAgua=true;
+          }
+          //cambiar imagen agua2 calentamiento terminado
+          if(temp_actual>=value_dialTemp_set){
+              temp_actual=value_dialTemp_set;
+              estadoSvide="calentamientoTerminado";
+              ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua2.png"));
+              timer_termocirculador->stop();
+          }
+          m_currentRootObject->setProperty("temp_mostrar", temp_actual);
+          m_currentRootObject->setProperty("tiempo_mostrar_seg",segRestante_actual);
+
+      }
+      else if(estadoSvide =="ciclo"){
+          if(contarTiempoMostrar == 0){
+              min_actual = min_actual + 1;
+              contarTiempoMostrar = contarTiempoMostrar+1;
+              if(min_actual>= value_dialMin_set){
+                  min_actual =  ui->dial_min->value();
+                  estadoSvide ="completado";
+                  ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua4_fin.png"));
+                  timer_termocirculador->stop();
+              }
+          }
+          else if(contarTiempoMostrar!=0){
+              contarTiempoMostrar = contarTiempoMostrar +1;
+              if(contarTiempoMostrar==2){ //Tiempo segundos muertos
+                  contarTiempoMostrar=0;
+              }
+          }
+//                qDebug()<<"contartiempo:"<<contarTiempoMostrar;
+      m_currentRootObject->setProperty("tiempo_mostrar",min_actual);
+
+      }
+      else if(estadoSvide=="pausa"){
+          timer_termocirculador->stop();
+      }
+
+//      qDebug()<<estadoSvide<<"\ttemperatura actual:"<<temp_actual<<"ºC\ttiempo transcurrido:"<<min_actual<<"min";
+
+//    }
+}
+

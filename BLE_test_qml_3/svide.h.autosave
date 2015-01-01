@@ -9,8 +9,8 @@ class svide
 public:
       svide();
      ~svide();
-      
-      characterEstado(QString info_estado);
+
+      characterEstado(QString info_estado, QString tempAgua, QString tempSonda, QString tiempo);
 
 public:
     QString UUID_servicio;

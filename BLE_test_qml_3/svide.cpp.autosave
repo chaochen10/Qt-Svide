@@ -12,33 +12,33 @@ svide::~svide(){
 
 }
 
-svide::characterEstado(QString info_estado){
-    QString estado = info_estado.left(1);
-    QString tempAgua = info_estado.mid(1,4);
-    QString tempSonda = info_estado.mid(5,4);
-    QString tiempo = info_estado.mid(9,3);
-    
-    switch (estado) {
-    case "0":
-        //reposo
-        break;
-    case "1":
-        //programado
-        break;
-    case "2":
-        //calentando
-        break;
-    case "3":
-        //ciclo
-        break;
-    case "4":
-        //pausa
-        break;
-    case "5":
-        //completado
-        break;
-    default:
-        break;
+svide::characterEstado(QString info_estado, QString tempAgua, QString tempSonda, QString tiempo){
+//    QString estado_1 = info_estado.left(1);
+//    QString tempAgua_2 = info_estado.mid(1,4);
+//    QString tempSonda_3 = info_estado.mid(5,4);
+//    QString tiempo_4 = info_estado.mid(9,3);
+
+//    switch (estado_1) {
+//    case "0":
+//        //reposo
+//        break;
+//    case "1":
+//        //programado
+//        break;
+//    case "2":
+//        //calentando
+//        break;
+//    case "3":
+//        //ciclo
+//        break;
+//    case "4":
+//        //pausa
+//        break;
+//    case "5":
+//        //completado
+//        break;
+//    default:
+//        break;
     }
 
 

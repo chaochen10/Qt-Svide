@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include "svide.h"
+#include "svideBle.h"
 #include <QMainWindow>
 #include <QtSerialPort/QSerialPort>
 #include <QQuickWidget>
@@ -22,7 +22,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    svide *Svide;
+    svideBle *Svide;
     QSerialPort *serial;
     QString datosSerial;
     QObject *m_currentRootObject;
@@ -34,10 +34,17 @@ private:
     QString Ble_servicio;
     QString Ble_notificacion;
     QString Ble_escLect;
-//    QString UUID_servicio;
-//    QString UUID_Notificacion;
-//    QString UUID_EscrituraLectura;
     QTimer *timer_BLEnotificacion;
+    QTimer *timer_termocirculador;
+    QString estadoSvide;
+    int value_dialMin_set;
+    int value_dialTemp_set;
+    int min_actual;
+    int temp_actual;
+    int segRestante_actual;
+    bool imagenMostrarAgua;
+    int contarTiempoMostrar;
+
 
 private slots:
     void openSerialPort();
@@ -46,10 +53,13 @@ private slots:
 
     void valueChangedDialTemp();
     void valueChangedDialMin();
+    void onStartTermocirculador();
     void initBLEconfig();
     void update_initBLEconfig();
     void BLEnotify();
     void update_BLEnotify();
+    void update_termocirculador();
+    void termocirculador();
 
 private:
     void initActionsConnections();

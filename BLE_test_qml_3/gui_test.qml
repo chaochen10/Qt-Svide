@@ -5,8 +5,13 @@ import QtQuick.Controls 1.1
 Rectangle {
     id: page
         property string currentText: "Valor Introducido"
-        property int angTemp_p: 20
-        property int angTiempo_p:120
+        property int angTemp_p: 25 //set
+        property int angTiempo_p:0 //set
+        property int temp_mostrar: 20 //actual
+        property int tiempo_mostrar: 0 //actual
+        property int tiempo_mostrar_seg:0
+        property string  stringTiempo
+
 
     width: 430; height: 400
     color: "black"
@@ -25,10 +30,9 @@ Rectangle {
             var ctx = getContext("2d");
             ctx.reset();
             var centreX = width / 2;
-            var centreY = height /2 -10;
-            var pcAngulotemperatura = Math.PI*2* (page.angTemp_p/100);
-            var pcAnguloTiempo = Math.PI*2*(page.angTiempo_p/100);
-            // console.log(porcentToAngulo)
+            var centreY = height / 2 -10;
+            var pcAngulotemperatura = Math.PI*2*(temp_mostrar-20)/(angTemp_p-20) ;
+//             console.log(tiempo_mostrar)
 
             if(true){// circulo temperatura
                 // circulo temperatura gris
@@ -66,8 +70,14 @@ Rectangle {
                 var angulofondo_i = anguloColor_f
                 var angulofondo = Math.PI/180*4//*
                 var angulofondo_f = angulofondo_i + angulofondo
-                var porcentColor = Math.PI*2/(anguloColor+angulofondo)*angTiempo_p/100
-
+                if(tiempo_mostrar==0 || angTiempo_p==0){
+                    var porcentColor =0
+                    stringTiempo = tiempo_mostrar_seg.toString() +"seg"
+                }
+                else{
+                    var porcentColor = Math.PI*2/(anguloColor+angulofondo)*(1-tiempo_mostrar/angTiempo_p)
+                    stringTiempo = tiempo_mostrar.toString()+"min"
+                }
                 for (var i=0; i<Math.PI*2/(anguloColor+angulofondo); i++){
                     ctx.beginPath();
                     ctx.strokeStyle = 'black'
@@ -114,7 +124,7 @@ Rectangle {
         }
 
         Timer {
-            interval: 500;
+            interval: 1000;
             repeat: true;
             running: true;
             onTriggered: {
@@ -123,7 +133,7 @@ Rectangle {
         }
 
         Text {
-            id: text_temperatura
+            id: text_temperatura_set
             x: 14
             y: 374
             width: 95
@@ -151,13 +161,13 @@ Rectangle {
         }
 
         Text {
-            id: text_tiempo
+            id: text_tiempo_set
             x: 303
             y: 374
             width: 106
             height: 42
             color: "#5a5858"
-            text: qsTr(((angTiempo_p*1.2).toFixed(0)).toString())
+            text: qsTr((angTiempo_p).toString())
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignTop
             font.pointSize: 35
@@ -181,6 +191,35 @@ Rectangle {
                 style: Text.Normal
                 font.bold: true
             }
+        }
+
+        Text {
+            id: temp_actual
+            x: 192
+            y: 163
+            width: 64
+            height: 26
+            color: "#bd0f0f"
+            text: qsTr(temp_mostrar.toString())
+            verticalAlignment: Text.AlignBottom
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: 35
+            font.family: "Waseem"
+        }
+
+        Text {
+            id: tiempo_actual
+            x: 192
+            y: 204
+            width: 64
+            height: 44
+            color: "#5a5858"
+            text:qsTr(stringTiempo)
+//            text: qsTr(tiempo_mostrar_seg.toString())
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: 35
+            font.family: "Waseem"
         }
 
     }

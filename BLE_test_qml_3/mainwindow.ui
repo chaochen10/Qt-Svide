@@ -43,7 +43,7 @@
    <widget class="QPushButton" name="serialComButton">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>270</x>
       <y>10</y>
       <width>56</width>
       <height>56</height>
@@ -115,7 +115,7 @@ color: rgb(62, 62, 62);
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>10</x>
       <y>10</y>
       <width>251</width>
       <height>64</height>
@@ -191,7 +191,7 @@ font: 75 11pt &quot;Papyrus&quot;;</string>
      <string notr="true">background-color: rgb(250, 10, 24);</string>
     </property>
     <property name="minimum">
-     <number>20</number>
+     <number>25</number>
     </property>
     <property name="maximum">
      <number>100</number>
@@ -253,7 +253,7 @@ font: 75 11pt &quot;Papyrus&quot;;</string>
      </rect>
     </property>
     <property name="text">
-     <string>20</string>
+     <string>25</string>
     </property>
    </widget>
    <widget class="QLabel" name="dial_letraC">
@@ -312,10 +312,10 @@ font: 75 11pt &quot;Papyrus&quot;;</string>
      <string>min</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_imagBLE">
+   <widget class="QLabel" name="label_imagIntro">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>370</x>
       <y>10</y>
       <width>61</width>
       <height>61</height>
@@ -511,7 +511,7 @@ font: 75 11pt &quot;Papyrus&quot;;</string>
    <widget class="QPushButton" name="button_blenotify">
     <property name="geometry">
      <rect>
-      <x>466</x>
+      <x>446</x>
       <y>470</y>
       <width>91</width>
       <height>23</height>
@@ -530,7 +530,7 @@ font: 75 11pt &quot;Papyrus&quot;;</string>
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>450</x>
       <y>450</y>
       <width>91</width>
       <height>20</height>
@@ -552,6 +552,12 @@ font: 75 11pt &quot;Papyrus&quot;;</string>
     <property name="text">
      <string>start</string>
     </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
    </widget>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
@@ -564,7 +570,7 @@ font: 75 11pt &quot;Papyrus&quot;;</string>
    <zorder>dial_letraC</zorder>
    <zorder>label_min</zorder>
    <zorder>dial_letraMin</zorder>
-   <zorder>label_imagBLE</zorder>
+   <zorder>label_imagIntro</zorder>
    <zorder>label_4</zorder>
    <zorder>label_5</zorder>
    <zorder>label_sammicBLE</zorder>

@@ -50,11 +50,11 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../BLE_test_qml_3/main.cpp \
 		../BLE_test_qml_3/mainwindow.cpp \
-		../BLE_test_qml_3/svide.cpp qrc_gui.cpp \
+		../BLE_test_qml_3/svideBle.cpp qrc_gui.cpp \
 		moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
-		svide.o \
+		svideBle.o \
 		qrc_gui.o \
 		moc_mainwindow.o
 DIST          = /Users/chaochen/Qt54/5.4/clang_64/mkspecs/features/spec_pre.prf \
@@ -188,9 +188,9 @@ DIST          = /Users/chaochen/Qt54/5.4/clang_64/mkspecs/features/spec_pre.prf 
 		/Users/chaochen/Qt54/5.4/clang_64/mkspecs/features/yacc.prf \
 		/Users/chaochen/Qt54/5.4/clang_64/mkspecs/features/lex.prf \
 		../BLE_test_qml_3/BLE_test.pro ../BLE_test_qml_3/mainwindow.h \
-		../BLE_test_qml_3/svide.h ../BLE_test_qml_3/main.cpp \
+		../BLE_test_qml_3/svideBle.h ../BLE_test_qml_3/main.cpp \
 		../BLE_test_qml_3/mainwindow.cpp \
-		../BLE_test_qml_3/svide.cpp
+		../BLE_test_qml_3/svideBle.cpp
 QMAKE_TARGET  = BLE_test
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = BLE_test.app/Contents/MacOS/BLE_test
@@ -543,8 +543,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../BLE_test_qml_3/gui.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../BLE_test_qml_3/mainwindow.h ../BLE_test_qml_3/svide.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../BLE_test_qml_3/main.cpp ../BLE_test_qml_3/mainwindow.cpp ../BLE_test_qml_3/svide.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../BLE_test_qml_3/mainwindow.h ../BLE_test_qml_3/svideBle.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../BLE_test_qml_3/main.cpp ../BLE_test_qml_3/mainwindow.cpp ../BLE_test_qml_3/svideBle.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../BLE_test_qml_3/mainwindow.ui $(DISTDIR)/
 
 
@@ -574,7 +574,14 @@ compiler_rcc_clean:
 qrc_gui.cpp: ../BLE_test_qml_3/gui.qrc \
 		../BLE_test_qml_3/imagenes/module_RN.png \
 		../BLE_test_qml_3/imagenes/logo_sammic.png \
+		../BLE_test_qml_3/imagenes/agua2.png \
+		../BLE_test_qml_3/imagenes/agua3_ciclo.png \
+		../BLE_test_qml_3/imagenes/agua00_reposo.png \
+		../BLE_test_qml_3/imagenes/agua1.png \
 		../BLE_test_qml_3/imagenes/disconnect.png \
+		../BLE_test_qml_3/imagenes/agua4_fin.png \
+		../BLE_test_qml_3/imagenes/agua0.png \
+		../BLE_test_qml_3/imagenes/agua3_pausa.png \
 		../BLE_test_qml_3/imagenes/connect.png \
 		../BLE_test_qml_3/gui_test.qml
 	/Users/chaochen/Qt54/5.4/clang_64/bin/rcc -name gui ../BLE_test_qml_3/gui.qrc -o qrc_gui.cpp
@@ -582,7 +589,10 @@ qrc_gui.cpp: ../BLE_test_qml_3/gui.qrc \
 compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
-moc_mainwindow.cpp: /Users/chaochen/Qt54/5.4/clang_64/lib/QtWidgets.framework/Versions/5/Headers/QMainWindow \
+moc_mainwindow.cpp: ../BLE_test_qml_3/svideBle.h \
+		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/QString \
+		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/qstring.h \
+		/Users/chaochen/Qt54/5.4/clang_64/lib/QtWidgets.framework/Versions/5/Headers/QMainWindow \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtWidgets.framework/Versions/5/Headers/qmainwindow.h \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtQuickWidgets.framework/Versions/5/Headers/QQuickWidget \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtQuickWidgets.framework/Versions/5/Headers/qquickwidget.h \
@@ -615,6 +625,9 @@ compiler_clean: compiler_rcc_clean compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 main.o: ../BLE_test_qml_3/main.cpp ../BLE_test_qml_3/mainwindow.h \
+		../BLE_test_qml_3/svideBle.h \
+		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/QString \
+		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/qstring.h \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtWidgets.framework/Versions/5/Headers/QMainWindow \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtWidgets.framework/Versions/5/Headers/qmainwindow.h \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtQuickWidgets.framework/Versions/5/Headers/QQuickWidget \
@@ -628,6 +641,9 @@ main.o: ../BLE_test_qml_3/main.cpp ../BLE_test_qml_3/mainwindow.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../BLE_test_qml_3/main.cpp
 
 mainwindow.o: ../BLE_test_qml_3/mainwindow.cpp ../BLE_test_qml_3/mainwindow.h \
+		../BLE_test_qml_3/svideBle.h \
+		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/QString \
+		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/qstring.h \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtWidgets.framework/Versions/5/Headers/QMainWindow \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtWidgets.framework/Versions/5/Headers/qmainwindow.h \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtQuickWidgets.framework/Versions/5/Headers/QQuickWidget \
@@ -637,15 +653,16 @@ mainwindow.o: ../BLE_test_qml_3/mainwindow.cpp ../BLE_test_qml_3/mainwindow.h \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/QTimer \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/qtimer.h \
 		ui_mainwindow.h \
-		../BLE_test_qml_3/svide.h \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtQuick.framework/Versions/5/Headers/QQuickItem \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtQuick.framework/Versions/5/Headers/qquickitem.h \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/QDebug \
 		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/qdebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../BLE_test_qml_3/mainwindow.cpp
 
-svide.o: ../BLE_test_qml_3/svide.cpp ../BLE_test_qml_3/svide.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o svide.o ../BLE_test_qml_3/svide.cpp
+svideBle.o: ../BLE_test_qml_3/svideBle.cpp ../BLE_test_qml_3/svideBle.h \
+		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/QString \
+		/Users/chaochen/Qt54/5.4/clang_64/lib/QtCore.framework/Versions/5/Headers/qstring.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o svideBle.o ../BLE_test_qml_3/svideBle.cpp
 
 qrc_gui.o: qrc_gui.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_gui.o qrc_gui.cpp
