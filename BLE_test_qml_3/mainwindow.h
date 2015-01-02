@@ -44,6 +44,7 @@ private:
     int segRestante_actual;
     bool imagenMostrarAgua;
     int contarTiempoMostrar;
+    bool comandoFinalizado;
 
 
 private slots:

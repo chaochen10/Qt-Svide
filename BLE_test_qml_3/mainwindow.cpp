@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     segRestante_actual = 0;
     temp_actual = 20;
     contarTiempoMostrar=0; ///para enviar tiempo actual al GUI
+    comandoFinalizado=false;
 
     ui->button_blenotify->setDefault(false);
     Ble_servicio = Svide->UUID_servicio;
@@ -29,15 +30,10 @@ MainWindow::MainWindow(QWidget *parent) :
     Ble_escLect = Svide->UUID_EscrituraLectura;
     ui->show_UUID->insertPlainText("R/W: "+Ble_escLect+"\n");
     ui->show_UUID->insertPlainText("Notif: "+Ble_notificacion);
-//    UUID_servicio ="53346d6d3163424c4573337276316365";
-//    UUID_EscrituraLectura="53346d6d3163424c45657363726c6563,0A,08";
-//    UUID_Notificacion="53346d6d3163424c456e6f7479666963,10,02";
-//    ui->show_UUID->insertPlainText("R/W: "+UUID_EscrituraLectura+"\n");
-//    ui->show_UUID->insertPlainText("Notif: "+UUID_Notificacion);
 
     numComandoIntro =1; ///muestra en la ventana las veces de comandos introducidos
     numBLEConfig =0; ///contandor para configuración BLE Servicios/Características Sammic
-    ui->button_bleconfig->setEnabled(false);
+    //    ui->button_bleconfig->setEnabled(false);
 
     QUrl source("qrc:userInterface/gui_test.qml");
     ui->guiSVide->setSource(source);
@@ -101,8 +97,6 @@ void MainWindow::openSerialPort()
 
         qDebug()<<"conexión:"<<serial->portName()<<" bps:"<<serial->baudRate()<<"databits:"<<serial->dataBits()
                <<"paridad:"<<serial->parity()<<" stopbit:"<<serial->stopBits()<<"flow:"<<serial->flowControl();
-        //        qDebug()<<serial->isOpen();
-        //        qDebug()<<serial->error();
 
         if(serial->isOpen()){
             ui->serialComButton->setIcon(QIcon(":/iconos/imagenes/connect.png"));
@@ -146,9 +140,9 @@ void MainWindow::valueChangedDialMin(){
 void MainWindow::valueChangedDialTemp(){
     value_dialTemp_set = ui->dial_temp->value();
     m_currentRootObject->setProperty("angTemp_p", value_dialTemp_set);
-//    m_currentRootObject->setProperty("tiempo_mostrar",value_dialTemp_set);
+    //    m_currentRootObject->setProperty("tiempo_mostrar",value_dialTemp_set);
 }
-/*Configuración BLE SAMMIC*/
+/*preConfiguración BLE SAMMIC*/
 void MainWindow::initBLEconfig(){
     ui->button_bleconfig->setStyleSheet("background-color:rgb(168, 255, 53);");
     ui->consola->setTextColor("blue");
@@ -159,69 +153,28 @@ void MainWindow::update_initBLEconfig(){
     ui->consola->setTextColor("blue");
     QString comando;
     numBLEConfig++;
-    switch(numBLEConfig){
-    case 1:
-        comando = "SF,1"; //factory reset
+    comando = Svide->preConfigBleSammic(numBLEConfig);
+
+    if(comandoFinalizado==false){
         serial->write(comando.toLatin1());
         comando = "-> "+comando+"\n";
         qDebug()<<comando;
         ui->consola->insertPlainText(comando);
-        break;
-    case 2:
-        comando = "SS,00000001"; //Enable private service support
-        serial->write(comando.toLatin1());
-        comando = "-> "+comando+"\n";
-        qDebug()<<comando;
-        ui->consola->insertPlainText(comando);
-        break;
-    case 3:
-        comando = "PZ"; //clear the current private service and characteristics
-        serial->write(comando.toLatin1());
-        comando = "-> "+comando+"\n";
-        qDebug()<<comando;
-        ui->consola->insertPlainText(comando);
-        break;
-    case 4:
-//        comando = "PS,"+UUID_servicio; //Set private service UUID 'S4mm1cBLEs3rv1ce'
-        comando = "PS,"+Ble_servicio; //Set private service UUID 'S4mm1cBLEs3rv1ce'
-        serial->write(comando.toLatin1());
-        comando = "-> "+comando+"\n";
-        qDebug()<<comando;
-        ui->consola->insertPlainText(comando);
-        break;
-    case 5:
-        comando = "PC,"+ Ble_escLect;//53346d6d3163424c45657363726c6563,0A,0F"; //Read/Write 'S4mm1cBLEescrlec'
-//        comando = "PC,"+ UUID_EscrituraLectura;//53346d6d3163424c45657363726c6563,0A,0F"; //Read/Write 'S4mm1cBLEescrlec'
-        serial->write(comando.toLatin1());
-        comando = "-> "+comando+"\n";
-        qDebug()<<comando;
-        ui->consola->insertPlainText(comando);
-        break;
-    case 6:
-        comando = "PC,"+Ble_notificacion;//53346d6d3163424c456e6f7479666963,10,02";//Notify 'S4mm1cBLEnotyfic'
-//        comando = "PC,"+UUID_Notificacion;//53346d6d3163424c456e6f7479666963,10,02";//Notify 'S4mm1cBLEnotyfic'
-        serial->write(comando.toLatin1());
-        comando = "-> "+comando+"\n";
-        qDebug()<<comando;
-        ui->consola->insertPlainText(comando);
-        break;
-    case 7:
-        comando ="R,1"; //Reboot
-        serial->write(comando.toLatin1());
-        comando = "-> "+comando+"\n";
-        qDebug()<<comando;
-        ui->consola->insertPlainText(comando);
-        break;
-    case 8:
-        comando ="** Configuración finalizada, ¡reiniciar RN4020! **";
+        if (comando=="-> R,1\n"){
+            comandoFinalizado =true;
+        }
+    }
+
+    else if(comandoFinalizado==true){
+        comando ="** Configuración finalizada ** ¡reiniciar RN4020!";
         comando =comando+"\n";
         qDebug()<<comando;
         ui->consola->insertPlainText(comando);
         ui->button_bleconfig->setStyleSheet("background-color: rgb(181, 161, 181);");
         ui->consola->setTextColor("black");
+        comandoFinalizado=false;
+        numBLEConfig=0;
         timer_BLEconfig->stop();
-        break;
-    default: break;
     }
 }
 /*Envio de notificación BLE SAMMIC*/
@@ -229,44 +182,42 @@ void MainWindow::BLEnotify(){
     if(!ui->button_blenotify->isDefault()){
         ui->button_blenotify->setStyleSheet("background-color:rgb(255, 178, 102);");
         ui->button_blenotify->setDefault(true);
-//        qDebug()<<ui->button_blenotify->isDefault();
+        //        qDebug()<<ui->button_blenotify->isDefault();
         timer_BLEnotificacion->start(2000);
     }
     else if(ui->button_blenotify->isDefault()){
         ui->button_blenotify->setStyleSheet("");
         ui->button_blenotify->setDefault(false);
-//        qDebug()<<ui->button_blenotify->isDefault();
+        //        qDebug()<<ui->button_blenotify->isDefault();
         timer_BLEnotificacion->stop();
+        ui->label_notificacion->setText("notificacion: Cancelada");
     }
-//    qDebug()<<ui->button_blenotify->isDefault();
+    //    qDebug()<<ui->button_blenotify->isDefault();
 }
 void MainWindow::update_BLEnotify(){
     QString soloUUIDnotify = Ble_notificacion.left(32);
-//    QString soloUUIDnotify = UUID_Notificacion.left(32);
-//    qDebug()<<soloUUIDnotify;
+    //    qDebug()<<soloUUIDnotify;
     QString dato_notificacion = Svide->characterEstado();
-//    qDebug()<<valor_notify.setNum(ui->dial_temp->value());
     QString notificacion ="suw,"+soloUUIDnotify+","+dato_notificacion;
     qDebug()<<notificacion;
-//    serial->write(notificacion.toLatin1());
+    ui->label_notificacion->setText(notificacion);
+    serial->write(notificacion.toLatin1());
+
 }
 /*Funcionamiento Svide*/
 void MainWindow::onStartBotonTermocirculador(){
-    //si se enciende cambiar icono/color
-    /**/
-
     if(estadoSvide=="reposo"){
-//        value_dialTemp_set = ui->dial_temp->value();
+        //        value_dialTemp_set = ui->dial_temp->value();
         estadoSvide="calentando";
         timer_termocirculador->start(1000);
         imagenMostrarAgua =true;
-//         m_currentRootObject->setProperty("onCiclo",false);
+        //         m_currentRootObject->setProperty("onCiclo",false);
     }
     else if(estadoSvide=="calentamientoTerminado"){
         estadoSvide="ciclo";
         ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua3_ciclo.png"));
         timer_termocirculador->start(1000);
-//         m_currentRootObject->setProperty("onCiclo",true);
+        //         m_currentRootObject->setProperty("onCiclo",true);
     }
     else if(estadoSvide=="ciclo"){
         estadoSvide="pausa";
@@ -279,7 +230,7 @@ void MainWindow::onStartBotonTermocirculador(){
     }
     else if(estadoSvide=="completado"){
         estadoSvide="reposo";
-//         m_currentRootObject->setProperty("onCiclo",false);
+        //         m_currentRootObject->setProperty("onCiclo",false);
         ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua00_reposo.png"));
         Svide->estado_info= estadoSvide;
         temp_actual = 20;
@@ -287,67 +238,67 @@ void MainWindow::onStartBotonTermocirculador(){
     }
 }
 void MainWindow::update_termocirculador(){
-//    if(serial->isOpen()){
-      if(estadoSvide=="reposo"){
+    //    if(serial->isOpen()){
+    if(estadoSvide=="reposo"){
 
-      }
-      else if(estadoSvide =="calentando"){
-          temp_actual = temp_actual + 1; ///actualización temperatura
-          segRestante_actual = (timer_termocirculador->interval())/1000*(value_dialTemp_set-temp_actual);//actualización tiempo restante de calentamiento
-          ///cambiar imagen agua0 calentando
-          if(imagenMostrarAgua){
-              ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua0.png"));
-              imagenMostrarAgua=false;
-          }
-          ///cambiar imagen agua1 calentando
-          else if(!imagenMostrarAgua){
-              ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua1.png"));
-              imagenMostrarAgua=true;
-          }
-          ///cambiar imagen agua2 calentamiento terminado
-          if(temp_actual>=value_dialTemp_set){
-              temp_actual=value_dialTemp_set;
-              estadoSvide="calentamientoTerminado";
-              ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua2.png"));
-              timer_termocirculador->stop();
-          }
-          m_currentRootObject->setProperty("temp_mostrar", temp_actual);
-          m_currentRootObject->setProperty("tiempo_mostrar_seg",segRestante_actual);
+    }
+    else if(estadoSvide =="calentando"){
+        temp_actual = temp_actual + 1; ///actualización temperatura
+        segRestante_actual = (timer_termocirculador->interval())/1000*(value_dialTemp_set-temp_actual);//actualización tiempo restante de calentamiento
+        ///cambiar imagen agua0 calentando
+        if(imagenMostrarAgua){
+            ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua0.png"));
+            imagenMostrarAgua=false;
+        }
+        ///cambiar imagen agua1 calentando
+        else if(!imagenMostrarAgua){
+            ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua1.png"));
+            imagenMostrarAgua=true;
+        }
+        ///cambiar imagen agua2 calentamiento terminado
+        if(temp_actual>=value_dialTemp_set){
+            temp_actual=value_dialTemp_set;
+            estadoSvide="calentamientoTerminado";
+            ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua2.png"));
+            timer_termocirculador->stop();
+        }
+        m_currentRootObject->setProperty("temp_mostrar", temp_actual);
+        m_currentRootObject->setProperty("tiempo_mostrar_seg",segRestante_actual);
 
-      }
-      else if(estadoSvide =="ciclo"){
-          if(contarTiempoMostrar == 0){
-              min_actual = min_actual + 1;
-              contarTiempoMostrar = contarTiempoMostrar+1;
-              ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua3_ciclo.png"));
-              if(min_actual>= value_dialMin_set){ ///completado
-                  min_actual =  ui->dial_min->value();
-                  estadoSvide ="completado";
-                  ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua4_fin.png"));
-                  timer_termocirculador->stop();
-              }
-          }
-          else if(contarTiempoMostrar!=0){
-              contarTiempoMostrar = contarTiempoMostrar +1;
-              ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua3_ciclo2.png"));
-              if(contarTiempoMostrar==2){ ///Tiempo segundos muertos
-                  contarTiempoMostrar=0;
-              }
-          }
-//                qDebug()<<"contartiempo:"<<contarTiempoMostrar;
-      m_currentRootObject->setProperty("tiempo_mostrar",min_actual);
+    }
+    else if(estadoSvide =="ciclo"){
+        if(contarTiempoMostrar == 0){
+            min_actual = min_actual + 1;
+            contarTiempoMostrar = contarTiempoMostrar+1;
+            ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua3_ciclo.png"));
+            if(min_actual>= value_dialMin_set){ ///completado
+                min_actual =  ui->dial_min->value();
+                estadoSvide ="completado";
+                ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua4_fin.png"));
+                timer_termocirculador->stop();
+            }
+        }
+        else if(contarTiempoMostrar!=0){
+            contarTiempoMostrar = contarTiempoMostrar +1;
+            ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua3_ciclo2.png"));
+            if(contarTiempoMostrar==2){ ///Tiempo segundos muertos
+                contarTiempoMostrar=0;
+            }
+        }
+        //                qDebug()<<"contartiempo:"<<contarTiempoMostrar;
+        m_currentRootObject->setProperty("tiempo_mostrar",min_actual);
 
-      }
-      else if(estadoSvide=="pausa"){
-          timer_termocirculador->stop();
-      }
+    }
+    else if(estadoSvide=="pausa"){
+        timer_termocirculador->stop();
+    }
 
-      Svide->estado_info= estadoSvide;
-      Svide->estado_tempAgua = temp_actual;
-      Svide->estado_tiempo_ciclo = min_actual;
-      Svide->estado_tiempo_calentamiento = segRestante_actual;
-//      qDebug()<<estadoSvide<<"\ttemperatura actual:"<<temp_actual<<"ºC\ttiempo transcurrido:"<<min_actual<<"min";
-//    qDebug()<<Svide->characterEstado();
-//    }
+    Svide->estado_info= estadoSvide;
+    Svide->estado_tempAgua = temp_actual;
+    Svide->estado_tiempo_ciclo = min_actual;
+    Svide->estado_tiempo_calentamiento = segRestante_actual;
+    //      qDebug()<<estadoSvide<<"\ttemperatura actual:"<<temp_actual<<"ºC\ttiempo transcurrido:"<<min_actual<<"min";
+    //    qDebug()<<Svide->characterEstado();
+    //    }
 }
 
