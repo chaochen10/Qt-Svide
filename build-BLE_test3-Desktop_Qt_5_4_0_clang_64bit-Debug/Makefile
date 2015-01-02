@@ -582,6 +582,7 @@ qrc_gui.cpp: ../BLE_test_qml_3/gui.qrc \
 		../BLE_test_qml_3/imagenes/agua4_fin.png \
 		../BLE_test_qml_3/imagenes/agua0.png \
 		../BLE_test_qml_3/imagenes/agua3_pausa.png \
+		../BLE_test_qml_3/imagenes/agua3_ciclo2.png \
 		../BLE_test_qml_3/imagenes/connect.png \
 		../BLE_test_qml_3/gui_test.qml
 	/Users/chaochen/Qt54/5.4/clang_64/bin/rcc -name gui ../BLE_test_qml_3/gui.qrc -o qrc_gui.cpp

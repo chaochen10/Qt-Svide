@@ -69,6 +69,7 @@ public:
     QPushButton *button_blenotify;
     QLabel *label_7;
     QPushButton *button_svideStart;
+    QLabel *label_intro_2;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QToolBar *toolBar;
@@ -93,7 +94,7 @@ public:
         guiSVide->setResizeMode(QQuickWidget::SizeRootObjectToView);
         serialComButton = new QPushButton(centralWidget);
         serialComButton->setObjectName(QStringLiteral("serialComButton"));
-        serialComButton->setGeometry(QRect(270, 10, 56, 56));
+        serialComButton->setGeometry(QRect(270, 30, 56, 56));
         QIcon icon1;
         icon1.addFile(QStringLiteral(":/iconos/imagenes/disconnect.png"), QSize(), QIcon::Normal, QIcon::Off);
         icon1.addFile(QStringLiteral(":/iconos/imagenes/connect.png"), QSize(), QIcon::Normal, QIcon::On);
@@ -102,7 +103,7 @@ public:
         serialComButton->setAutoDefault(true);
         layoutWidget = new QWidget(centralWidget);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 80, 421, 351));
+        layoutWidget->setGeometry(QRect(10, 100, 421, 351));
         verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
@@ -137,7 +138,7 @@ public:
 
         layoutWidget1 = new QWidget(centralWidget);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 10, 251, 64));
+        layoutWidget1->setGeometry(QRect(10, 30, 251, 64));
         verticalLayout_2 = new QVBoxLayout(layoutWidget1);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -183,6 +184,7 @@ public:
         font.setPointSize(11);
         font.setBold(false);
         font.setItalic(false);
+        font.setUnderline(true);
         font.setWeight(9);
         label_intro->setFont(font);
         label_intro->setStyleSheet(QLatin1String("color: rgb(170, 0, 0);\n"
@@ -229,7 +231,7 @@ public:
         dial_letraMin->setFont(font1);
         label_imagIntro = new QLabel(centralWidget);
         label_imagIntro->setObjectName(QStringLiteral("label_imagIntro"));
-        label_imagIntro->setGeometry(QRect(370, 10, 61, 61));
+        label_imagIntro->setGeometry(QRect(370, 30, 61, 61));
         label_imagIntro->setAutoFillBackground(true);
         label_imagIntro->setFrameShape(QFrame::WinPanel);
         label_imagIntro->setLineWidth(0);
@@ -311,6 +313,13 @@ public:
         button_svideStart->setGeometry(QRect(830, 470, 61, 51));
         button_svideStart->setAutoDefault(false);
         button_svideStart->setDefault(false);
+        label_intro_2 = new QLabel(centralWidget);
+        label_intro_2->setObjectName(QStringLiteral("label_intro_2"));
+        label_intro_2->setGeometry(QRect(20, 10, 311, 16));
+        label_intro_2->setFont(font);
+        label_intro_2->setStyleSheet(QLatin1String("color: rgb(170, 0, 0);\n"
+"font: 75 11pt \"Papyrus\";"));
+        label_intro_2->setTextFormat(Qt::AutoText);
         MainWindow->setCentralWidget(centralWidget);
         layoutWidget->raise();
         layoutWidget->raise();
@@ -333,6 +342,7 @@ public:
         button_blenotify->raise();
         label_7->raise();
         button_svideStart->raise();
+        label_intro_2->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 900, 22));
@@ -361,7 +371,7 @@ public:
         label->setText(QApplication::translate("MainWindow", "comando: ", 0));
         label_2->setText(QApplication::translate("MainWindow", "conexi\303\263n con :", 0));
         label_3->setText(QApplication::translate("MainWindow", "baudios bps  :", 0));
-        label_intro->setText(QApplication::translate("MainWindow", "SAMMIC   SVide      - BLE TEST-", 0));
+        label_intro->setText(QApplication::translate("MainWindow", "SAMMIC   SVide      - GUI -", 0));
         label_temp->setText(QApplication::translate("MainWindow", "25", 0));
         dial_letraC->setText(QApplication::translate("MainWindow", "\302\272C", 0));
         label_min->setText(QApplication::translate("MainWindow", "0", 0));
@@ -376,6 +386,7 @@ public:
         button_blenotify->setText(QApplication::translate("MainWindow", "BLE Notificacion", 0));
         label_7->setText(QApplication::translate("MainWindow", "temperatura set", 0));
         button_svideStart->setText(QApplication::translate("MainWindow", "start", 0));
+        label_intro_2->setText(QApplication::translate("MainWindow", "SAMMIC   SVide      - BLE comunicaci\303\263n Test -", 0));
         toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0));
     } // retranslateUi
 

@@ -53,13 +53,12 @@ private slots:
 
     void valueChangedDialTemp();
     void valueChangedDialMin();
-    void onStartTermocirculador();
+    void onStartBotonTermocirculador();
     void initBLEconfig();
     void update_initBLEconfig();
     void BLEnotify();
     void update_BLEnotify();
     void update_termocirculador();
-    void termocirculador();
 
 private:
     void initActionsConnections();

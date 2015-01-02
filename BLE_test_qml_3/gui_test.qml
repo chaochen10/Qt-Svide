@@ -13,6 +13,7 @@ Rectangle {
         property string  stringTiempo
 
 
+
     width: 430; height: 400
     color: "black"
 
@@ -32,7 +33,8 @@ Rectangle {
             var centreX = width / 2;
             var centreY = height / 2 -10;
             var pcAngulotemperatura = Math.PI*2*(temp_mostrar-20)/(angTemp_p-20) ;
-//             console.log(tiempo_mostrar)
+//             console.log(tiempo_mostrar+" " +angTiempo_p)
+//            console.log(angTemp_p)
 
             if(true){// circulo temperatura
                 // circulo temperatura gris
@@ -70,13 +72,14 @@ Rectangle {
                 var angulofondo_i = anguloColor_f
                 var angulofondo = Math.PI/180*4//*
                 var angulofondo_f = angulofondo_i + angulofondo
-                if(tiempo_mostrar==0 || angTiempo_p==0){
-                    var porcentColor =0
-                    stringTiempo = tiempo_mostrar_seg.toString() +"seg"
+                var porcentColor
+                if(tiempo_mostrar== 0 || angTiempo_p== 0){
+                     porcentColor = 0
+                    stringTiempo = tiempo_mostrar_seg.toString() +" seg"
                 }
                 else{
-                    var porcentColor = Math.PI*2/(anguloColor+angulofondo)*(1-tiempo_mostrar/angTiempo_p)
-                    stringTiempo = tiempo_mostrar.toString()+"min"
+                     porcentColor = Math.PI*2/(anguloColor+angulofondo)*(1-tiempo_mostrar/angTiempo_p)
+                    stringTiempo = tiempo_mostrar.toString()+" min"
                 }
                 for (var i=0; i<Math.PI*2/(anguloColor+angulofondo); i++){
                     ctx.beginPath();
@@ -200,11 +203,11 @@ Rectangle {
             width: 64
             height: 26
             color: "#bd0f0f"
-            text: qsTr(temp_mostrar.toString())
+            text: qsTr(temp_mostrar.toString()+" ºC")
             verticalAlignment: Text.AlignBottom
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: 35
-            font.family: "Waseem"
+            font.family: "Droid"
         }
 
         Text {
@@ -215,11 +218,10 @@ Rectangle {
             height: 44
             color: "#5a5858"
             text:qsTr(stringTiempo)
-//            text: qsTr(tiempo_mostrar_seg.toString())
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: 35
-            font.family: "Waseem"
+            font.family: "Droid"
         }
 
     }

@@ -14,5 +14,6 @@
         <file>imagenes/agua3_pausa.png</file>
         <file>imagenes/agua4_fin.png</file>
         <file>imagenes/agua00_reposo.png</file>
+        <file>imagenes/agua3_ciclo2.png</file>
     </qresource>
 </RCC>
