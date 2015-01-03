@@ -1,0 +1,45 @@
+#include "svide.h"
+
+
+svide::svide (){
+    UUID_servicio ="53346d6d3163424c4573337276316365";
+    UUID_EscrituraLectura="53346d6d3163424c45657363726c6563,0A,08";
+    UUID_Notificacion="53346d6d3163424c456e6f7479666963,10,02";
+
+}
+
+svide::~svide(){
+
+}
+
+svide::characterEstado(QString info_estado, QString tempAgua, QString tempSonda, QString tiempo){
+//    QString estado_1 = info_estado.left(1);
+//    QString tempAgua_2 = info_estado.mid(1,4);
+//    QString tempSonda_3 = info_estado.mid(5,4);
+//    QString tiempo_4 = info_estado.mid(9,3);
+
+//    switch (estado_1) {
+//    case "0":
+//        //reposo
+//        break;
+//    case "1":
+//        //programado
+//        break;
+//    case "2":
+//        //calentando
+//        break;
+//    case "3":
+//        //ciclo
+//        break;
+//    case "4":
+//        //pausa
+//        break;
+//    case "5":
+//        //completado
+//        break;
+//    default:
+//        break;
+    }
+
+
+}
