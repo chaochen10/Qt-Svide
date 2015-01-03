@@ -135,9 +135,9 @@ void MainWindow::onSerialRead(){
 //                    ui->dial_temp->setValue(Svide->orden_tempAgua);
                     ui->dial_min->setValue(Svide->orden_tiempoCiclo);
                     ui->dial_temp->setValue(Svide->orden_tempAgua);
+                    ui->label_ordenCiclo->setText(Svide->label_orden);
                     emit ordenCicloSvide();
                     ui->button_svideStart->clicked();
-
 
 
 //                    ui->button_svideStart->clicked();
@@ -261,8 +261,11 @@ void MainWindow::onStartBotonTermocirculador(){
         //         m_currentRootObject->setProperty("onCiclo",false);
         ui->label_imagIntro->setPixmap(QPixmap(":/iconos/imagenes/agua00_reposo.png"));
         Svide->estado_info= estadoSvide;
+        ui->label_ordenCiclo->setText("Orden para Svide\n\nagua set: ---\nsonda set: ---\ntiempo set: ---");
         temp_actual = 20;
         min_actual = 0;
+        ui->label_ordenCiclo->setText("Orden para Svide\n\nagua set: ---\nsonda set: ---\ntiempo set: ---");
+
     }
 }
 void MainWindow::update_termocirculador(){

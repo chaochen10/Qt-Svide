@@ -70,6 +70,7 @@ public:
     QLabel *label_notificacion;
     QPushButton *button_svideStart;
     QLabel *label_intro_2;
+    QLabel *label_ordenCiclo;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QToolBar *toolBar;
@@ -90,7 +91,7 @@ public:
         centralWidget->setStyleSheet(QStringLiteral("color: rgb(59, 59, 59);"));
         guiSVide = new QQuickWidget(centralWidget);
         guiSVide->setObjectName(QStringLiteral("guiSVide"));
-        guiSVide->setGeometry(QRect(449, 30, 430, 400));
+        guiSVide->setGeometry(QRect(449, 30, 430, 421));
         guiSVide->setResizeMode(QQuickWidget::SizeRootObjectToView);
         serialComButton = new QPushButton(centralWidget);
         serialComButton->setObjectName(QStringLiteral("serialComButton"));
@@ -190,7 +191,7 @@ public:
 "font: 75 11pt \"Papyrus\";"));
         dial_temp = new QDial(centralWidget);
         dial_temp->setObjectName(QStringLiteral("dial_temp"));
-        dial_temp->setGeometry(QRect(614, 440, 90, 90));
+        dial_temp->setGeometry(QRect(614, 460, 90, 90));
         dial_temp->setStyleSheet(QStringLiteral("background-color: rgb(250, 10, 24);"));
         dial_temp->setMinimum(25);
         dial_temp->setMaximum(100);
@@ -199,7 +200,7 @@ public:
         dial_temp->setNotchesVisible(true);
         dial_min = new QDial(centralWidget);
         dial_min->setObjectName(QStringLiteral("dial_min"));
-        dial_min->setGeometry(QRect(724, 440, 90, 90));
+        dial_min->setGeometry(QRect(724, 460, 90, 90));
         dial_min->setMouseTracking(false);
         dial_min->setAutoFillBackground(false);
         dial_min->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
@@ -211,10 +212,10 @@ public:
         dial_min->setNotchesVisible(true);
         label_temp = new QLabel(centralWidget);
         label_temp->setObjectName(QStringLiteral("label_temp"));
-        label_temp->setGeometry(QRect(639, 475, 25, 16));
+        label_temp->setGeometry(QRect(639, 495, 25, 16));
         dial_letraC = new QLabel(centralWidget);
         dial_letraC->setObjectName(QStringLiteral("dial_letraC"));
-        dial_letraC->setGeometry(QRect(668, 475, 21, 16));
+        dial_letraC->setGeometry(QRect(668, 495, 21, 16));
         QFont font1;
         font1.setPointSize(10);
         font1.setBold(true);
@@ -223,10 +224,10 @@ public:
         dial_letraC->setStyleSheet(QStringLiteral(""));
         label_min = new QLabel(centralWidget);
         label_min->setObjectName(QStringLiteral("label_min"));
-        label_min->setGeometry(QRect(750, 475, 25, 16));
+        label_min->setGeometry(QRect(750, 495, 25, 16));
         dial_letraMin = new QLabel(centralWidget);
         dial_letraMin->setObjectName(QStringLiteral("dial_letraMin"));
-        dial_letraMin->setGeometry(QRect(775, 475, 21, 16));
+        dial_letraMin->setGeometry(QRect(775, 495, 21, 16));
         dial_letraMin->setFont(font1);
         label_imagIntro = new QLabel(centralWidget);
         label_imagIntro->setObjectName(QStringLiteral("label_imagIntro"));
@@ -239,7 +240,7 @@ public:
         label_imagIntro->setWordWrap(false);
         label_4 = new QLabel(centralWidget);
         label_4->setObjectName(QStringLiteral("label_4"));
-        label_4->setGeometry(QRect(760, 490, 31, 16));
+        label_4->setGeometry(QRect(760, 510, 31, 16));
         QFont font2;
         font2.setPointSize(8);
         font2.setBold(false);
@@ -249,7 +250,7 @@ public:
         label_4->setFont(font2);
         label_5 = new QLabel(centralWidget);
         label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setGeometry(QRect(650, 490, 31, 16));
+        label_5->setGeometry(QRect(650, 510, 31, 16));
         label_5->setFont(font2);
         label_sammicBLE = new QLabel(centralWidget);
         label_sammicBLE->setObjectName(QStringLiteral("label_sammicBLE"));
@@ -301,18 +302,20 @@ public:
         label_6->setTextFormat(Qt::RichText);
         button_blenotify = new QPushButton(centralWidget);
         button_blenotify->setObjectName(QStringLiteral("button_blenotify"));
-        button_blenotify->setGeometry(QRect(446, 530, 91, 23));
+        button_blenotify->setGeometry(QRect(6, 465, 91, 23));
         button_blenotify->setAutoDefault(false);
         button_blenotify->setFlat(false);
         label_notificacion = new QLabel(centralWidget);
         label_notificacion->setObjectName(QStringLiteral("label_notificacion"));
-        label_notificacion->setGeometry(QRect(550, 535, 341, 20));
+        label_notificacion->setGeometry(QRect(110, 470, 321, 20));
         QFont font7;
         font7.setPointSize(11);
         label_notificacion->setFont(font7);
+        label_notificacion->setFrameShape(QFrame::WinPanel);
+        label_notificacion->setFrameShadow(QFrame::Sunken);
         button_svideStart = new QPushButton(centralWidget);
         button_svideStart->setObjectName(QStringLiteral("button_svideStart"));
-        button_svideStart->setGeometry(QRect(830, 460, 61, 51));
+        button_svideStart->setGeometry(QRect(830, 480, 61, 51));
         button_svideStart->setAutoDefault(false);
         button_svideStart->setDefault(false);
         label_intro_2 = new QLabel(centralWidget);
@@ -322,6 +325,15 @@ public:
         label_intro_2->setStyleSheet(QLatin1String("color: rgb(170, 0, 0);\n"
 "font: 75 11pt \"Papyrus\";"));
         label_intro_2->setTextFormat(Qt::AutoText);
+        label_ordenCiclo = new QLabel(centralWidget);
+        label_ordenCiclo->setObjectName(QStringLiteral("label_ordenCiclo"));
+        label_ordenCiclo->setGeometry(QRect(450, 470, 131, 81));
+        label_ordenCiclo->setFont(font7);
+        label_ordenCiclo->setFrameShape(QFrame::WinPanel);
+        label_ordenCiclo->setFrameShadow(QFrame::Sunken);
+        label_ordenCiclo->setLineWidth(1);
+        label_ordenCiclo->setMidLineWidth(0);
+        label_ordenCiclo->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         MainWindow->setCentralWidget(centralWidget);
         layoutWidget->raise();
         layoutWidget->raise();
@@ -345,6 +357,7 @@ public:
         label_notificacion->raise();
         button_svideStart->raise();
         label_intro_2->raise();
+        label_ordenCiclo->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 900, 22));
@@ -389,6 +402,11 @@ public:
         label_notificacion->setText(QApplication::translate("MainWindow", "notificacion: ----", 0));
         button_svideStart->setText(QApplication::translate("MainWindow", "start", 0));
         label_intro_2->setText(QApplication::translate("MainWindow", "SAMMIC   SVide      - BLE comunicaci\303\263n Test -", 0));
+        label_ordenCiclo->setText(QApplication::translate("MainWindow", "Orden para Svide\n"
+"\n"
+"agua set: ---\n"
+"sonda set: ---\n"
+"tiempo set: ---", 0));
         toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0));
     } // retranslateUi
 

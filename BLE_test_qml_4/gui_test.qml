@@ -138,7 +138,7 @@ Rectangle {
         Text {
             id: text_temperatura_set
             x: 14
-            y: 374
+            y: 393
             width: 95
             height: 50
             color: "#bd0f0f"
@@ -166,7 +166,7 @@ Rectangle {
         Text {
             id: text_tiempo_set
             x: 303
-            y: 374
+            y: 393
             width: 106
             height: 42
             color: "#5a5858"

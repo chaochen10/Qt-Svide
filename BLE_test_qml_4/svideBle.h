@@ -9,11 +9,6 @@ class svideBle: public QObject
 {
 //    Q_OBJECT
 
-private:
-    int temporal_temperatura;
-    int temporal_tiempo;
-
-
 public:
       svideBle(QObject *parent = 0);
      ~svideBle();
@@ -36,6 +31,7 @@ public:
     int orden_tempAgua;
     int orden_tempSonda;
     int orden_tiempoCiclo;
+    QString label_orden;
 
 };
 

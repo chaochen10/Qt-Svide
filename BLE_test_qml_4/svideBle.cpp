@@ -67,6 +67,8 @@ void svideBle::characterOrdenCiclo(QByteArray orden){
         orden_tempSonda = int((tempSonda.toInt())/10);
         orden_tiempoCiclo = tiempoCiclo.toInt();
         qDebug()<<orden_tempAgua<<" "<<orden_tempSonda<<" "<<orden_tiempoCiclo;
+        label_orden = QString("Orden para Svide\n\nagua set: %1\nsonda set: %2\ntiempo set: %3")
+                .arg(orden_tempAgua).arg(orden_tempSonda).arg(orden_tiempoCiclo);
     }
 }
 
@@ -106,7 +108,4 @@ QString svideBle::preConfigBleSammic(int pos_Ble){
     return _comando;
 }
 
-/////SIGNAL
-//void svideBle::nuevoOrdenCiclo(){
 
-//}
